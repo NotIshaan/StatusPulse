@@ -1,0 +1,65 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    container_name: statuspulse_app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - statuspulse_net
+    deploy:
+      resources:
+        limits:
+          memory: 300m
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8000/health || exit 1"]
+      interval: 30s
+      retries: 3  
+
+
+  postgres:
+    image: postgres:15
+    container_name: statuspulse_db
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - statuspulse_net
+    deploy:
+      resources:
+        limits:
+          memory: 300m
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      retries: 3
+
+  redis:
+    image: redis:7
+    container_name: statuspulse_redis
+    networks:
+      - statuspulse_net
+    deploy:
+      resources:
+        limits:
+          memory: 200m
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      retries: 3
+
+volumes:
+  pgdata:
+
+networks:
+  statuspulse_net:
+    driver: bridge

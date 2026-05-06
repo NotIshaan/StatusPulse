@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.git
+.gitignore
+Dockerfile
+docker-compose.yml
+README.md
+tests/
+scripts/
+terraform/
