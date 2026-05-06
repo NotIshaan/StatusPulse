@@ -32,6 +32,9 @@ jobs:
           dockerfile: Dockerfile
           ignore: DL3018
 
+      - name: Create temporary .env file for CI
+        run: cp .env.example .env
+
       - name: Build Docker image
         run: docker compose build
 
