@@ -8,7 +8,7 @@ We use `trivy` to scan our production images for vulnerabilities.
 
 ## Secret Management (Task 6b)
 - **Zero Secrets Policy**: No passwords, tokens, or keys are committed to version control.
-- **Environment Variables**: A `.env.example` is provided, but the actual `.env` is ignored via `.dockerignore` and `.gitignore`.
+- **Environment Variables**: A `.env.example` is provided, but the actual `.env` is ignored via `.dockerignore` and `.gitignore`. 
 - **CI/CD Security**: All deployment credentials (SSH keys, registry passwords, webhooks) are managed via encrypted GitHub Actions Secrets.
 
 ## Reverse Proxy Security (Task 6c)
