@@ -46,8 +46,6 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      # --- TASK 2(b) DEPLOYMENT AND ALERTING STEPS ---
-
       - name: Deploy to Server via SSH
         id: deploy
         uses: appleboy/ssh-action@v1.0.3
@@ -63,13 +61,13 @@ jobs:
       - name: Notify Success
         if: success()
         run: |
-          curl -H "Content-Type: application/json" \
-          -d '{"content":" **StatusPulse Deployment Successful!**\nCommit: `${{ github.sha }}`\nThe new image is healthy and live!"}' \
+          curl -X POST -H "Content-Type: application/json" \
+          -d '{"text":"[SUCCESS] StatusPulse Deployment Successful!\nCommit: `${{ github.sha }}`\nThe new image is healthy and live!"}' \
           ${{ secrets.ALERT_WEBHOOK_URL }}
 
       - name: Notify Failure and Rollback
         if: failure()
         run: |
-          curl -H "Content-Type: application/json" \
-          -d '{"content":" **StatusPulse Deployment FAILED!**\nCommit: `${{ github.sha }}`\nHealth check failed. The system has automatically rolled back to the previous stable version."}' \
+          curl -X POST -H "Content-Type: application/json" \
+          -d '{"text":"[FAILED] StatusPulse Deployment FAILED!\nCommit: `${{ github.sha }}`\nHealth check failed. The system has automatically rolled back to the previous stable version."}' \
           ${{ secrets.ALERT_WEBHOOK_URL }}
