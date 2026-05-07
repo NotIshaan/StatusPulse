@@ -66,7 +66,7 @@ if [ "$HTTP_CODE" -eq 200 ]; then
     log " Upgrading production service (Stop Old -> Start New)..."
     # Self-healing: Remove the manually created network from our previous bug if it has no containers
     docker network rm statuspulse_net 2>/dev/null || true
-    docker compose -f docker-compose.prod.yml up -d app
+    docker compose -f docker-compose.prod.yml up -d
     log "Deployment successful!"
 else
     log " Pre-check FAILED (HTTP $HTTP_CODE). The new image is broken!"
