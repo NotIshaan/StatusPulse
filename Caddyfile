@@ -1,18 +1,14 @@
 ishaan-statuspulse.duckdns.org {
-    # Force security headers on ALL responses (Task 6c)
-    header {
-        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
-        X-Content-Type-Options "nosniff"
-        X-Frame-Options "DENY"
-        X-XSS-Protection "1; mode=block"
-        Content-Security-Policy "default-src 'self' 'unsafe-inline';"
-        # Remove the Server header to hide tech stack (Extra Hardening)
-        -Server
-    }
-
     # API Routing
     @app path / /health /services /incidents /docs* /openapi.json
     handle @app {
+        # Force security headers on API responses (Task 6c)
+        header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        header X-Content-Type-Options "nosniff"
+        header X-Frame-Options "DENY"
+        header X-XSS-Protection "1; mode=block"
+        header -Server
+        
         reverse_proxy app:8000
     }
 
