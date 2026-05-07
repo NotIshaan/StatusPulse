@@ -26,6 +26,9 @@ fi
 
 # 3. ZERO-DOWNTIME PRE-CHECK: Start new image temporarily
 log "🧪 Starting temporary container for pre-deployment health check..."
+# Ensure the custom network exists before starting the test container
+docker network create statuspulse_net 2>/dev/null || true
+
 # We run it on the custom network so it can talk to the DB/Redis
 docker run -d --name app-test-container --network statuspulse_net --env-file .env $IMAGE
 
