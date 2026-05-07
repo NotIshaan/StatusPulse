@@ -8,14 +8,6 @@ import json
 
 app = FastAPI(title="StatusPulse", version="1.0.0")
 
-def get_db_connection():
-    return psycopg2.connect(
-        host=os.environ["DB_HOST"],
-        port=os.environ.get("DB_PORT", "5432"),
-        dbname=os.environ["DB_NAME"],
-        user=os.environ["DB_USER"],
-        password=os.environ["DB_PASSWORD"],
-    )
 
 def get_redis_connection():
     return redis.Redis(
