@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 # StatusPulse Zero-Downtime Deploy & Rollback Script
 
 LOGFILE="/home/deploy/StatusPulse/deploy.log"
@@ -26,9 +27,6 @@ fi
 
 # 3. ZERO-DOWNTIME PRE-CHECK: Start new image temporarily
 log "🧪 Starting temporary container for pre-deployment health check..."
-# Ensure the custom network exists (fallback)
-docker network create statuspulse_net 2>/dev/null || true
-
 # Find the network the DB is currently running on so our test container can reach it
 DB_NETWORK=$(docker inspect -f '{{range $k, $v := .NetworkSettings.Networks}}{{$k}}{{end}}' statuspulse-db-1 | head -n 1)
 if [ -z "$DB_NETWORK" ]; then
@@ -66,6 +64,8 @@ if [ "$HTTP_CODE" -eq 200 ]; then
     docker rm -f app-test-container
     
     log " Upgrading production service (Stop Old -> Start New)..."
+    # Self-healing: Remove the manually created network from our previous bug if it has no containers
+    docker network rm statuspulse_net 2>/dev/null || true
     docker compose -f docker-compose.prod.yml up -d app
     log "Deployment successful!"
 else
