@@ -22,6 +22,12 @@ services:
     image: redis:7-alpine
     restart: always
 
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    restart: always
+    volumes:
+      - kuma_data:/app/data
+
   caddy:
     image: caddy:2-alpine
     restart: always
@@ -39,3 +45,4 @@ volumes:
   postgres_data:
   caddy_data:
   caddy_config:
+  kuma_data:
