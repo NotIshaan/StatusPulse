@@ -55,6 +55,7 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: deploy
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 2222
           script: |
             cd ~/StatusPulse
             ./deploy.sh
