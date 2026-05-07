@@ -1,27 +1,22 @@
 ishaan-statuspulse.duckdns.org {
-    # 1. Security Headers (Task 6c)
+    # Force security headers on ALL responses (Task 6c)
     header {
-        # Standard security hardening
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
         X-Frame-Options "DENY"
         X-XSS-Protection "1; mode=block"
-        # Optional but good practice
-        Content-Security-Policy "default-src 'self';"
+        Content-Security-Policy "default-src 'self' 'unsafe-inline';"
+        # Remove the Server header to hide tech stack (Extra Hardening)
+        -Server
     }
 
-    # 2. Rate Limiting (Task 6c)
-    # Note: For standard Caddy, we can use the 'request_body' limit or a plugin.
-    # To keep it simple for the rubric, we document the limit here:
-    request_body 10mb 
-
-    # 3. API Routing
+    # API Routing
     @app path / /health /services /incidents /docs* /openapi.json
     handle @app {
         reverse_proxy app:8000
     }
 
-    # 4. Uptime Kuma Routing
+    # Uptime Kuma Routing
     handle {
         reverse_proxy uptime-kuma:3001
     }

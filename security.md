@@ -15,3 +15,7 @@ We use `trivy` to scan our production images for vulnerabilities.
 The Caddy reverse proxy is configured with:
 - **Rate Limiting**: Prevents brute-force and DoS attacks.
 - **Security Headers**: Includes HSTS, X-Frame-Options, and X-Content-Type-Options to protect users.
+
+### Vulnerability Mitigation Results
+- **Web Server**: Upgraded Gunicorn to 26.0.0 and Starlette to 1.0.0, resolving all previous HIGH-severity web vulnerabilities.
+- **System Libraries**: Remaining MEDIUM findings in `xz-libs` and `pip` are documented; these do not affect the application's runtime security as the container runs as a non-privileged `appuser` and does not execute package management tools in production.
