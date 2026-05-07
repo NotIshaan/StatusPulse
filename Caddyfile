@@ -1,9 +1,10 @@
 ishaan-statuspulse.duckdns.org {
-    handle_path /status* {
-        reverse_proxy uptime-kuma:3001
+    @app path / /health /services /incidents /docs* /openapi.json
+    handle @app {
+        reverse_proxy app:8000
     }
     
     handle {
-        reverse_proxy app:8000
+        reverse_proxy uptime-kuma:3001
     }
 }
