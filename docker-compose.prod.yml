@@ -53,6 +53,7 @@ services:
 
 networks:
   statuspulse_net:
+    name: statuspulse_net
     driver: bridge
 
 volumes:

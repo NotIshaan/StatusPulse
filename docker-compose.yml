@@ -62,4 +62,5 @@ volumes:
 
 networks:
   statuspulse_net:
+    name: statuspulse_net
     driver: bridge
