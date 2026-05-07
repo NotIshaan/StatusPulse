@@ -6,6 +6,8 @@ services:
     depends_on:
       - db
       - redis
+    networks:
+      - statuspulse_net
 
   db:
     image: postgres:15-alpine
@@ -17,16 +19,22 @@ services:
       POSTGRES_DB: ${DB_NAME}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - statuspulse_net
 
   redis:
     image: redis:7-alpine
     restart: always
+    networks:
+      - statuspulse_net
 
   uptime-kuma:
     image: louislam/uptime-kuma:1
     restart: always
     volumes:
       - kuma_data:/app/data
+    networks:
+      - statuspulse_net
 
   caddy:
     image: caddy:2-alpine
@@ -40,6 +48,12 @@ services:
       - caddy_config:/config
     depends_on:
       - app
+    networks:
+      - statuspulse_net
+
+networks:
+  statuspulse_net:
+    driver: bridge
 
 volumes:
   postgres_data:
